@@ -1,39 +1,86 @@
-# ERC 4337 landing page
-This is the frontend project of the ERC-4337 Landing Page, based on Next.js.
+# ERC-4337 Bundler Test Results
 
-## Development
+A standalone, modern web page displaying ERC-4337 bundler test results. This is a simplified version of the original bundlers page, designed to be hosted on GitHub Pages.
 
-First, install dependencies.
+## Features
 
-```bash
-npm install
-# or
-yarn install
+- **Modern Design**: Clean, responsive interface using Tailwind CSS
+- **Dark/Light Theme**: Toggle between dark and light modes with persistent preference
+- **Mobile Responsive**: Optimized for all screen sizes with horizontal scrolling for tables
+- **Version Selection**: Switch between bundler versions (0.6, 0.7, 0.8)
+- **Real-time Data**: Fetches test results from the official ERC-4337 test results API
+- **No Dependencies**: Pure HTML, CSS, and JavaScript - no build process required
+
+## Files
+
+- `index.html` - Main HTML file with the page structure and styling
+- `script.js` - JavaScript logic for data fetching, processing, and rendering
+- `README.md` - This file
+
+## Hosting on GitHub Pages
+
+### Option 1: Direct Repository Hosting
+
+1. Create a new GitHub repository
+2. Upload the `index.html` and `script.js` files to the repository
+3. Go to repository Settings → Pages
+4. Select "Deploy from a branch" and choose the main branch
+5. Your site will be available at `https://[username].github.io/[repository-name]`
+
+### Option 2: GitHub Gist (Alternative)
+
+1. Create a new GitHub Gist
+2. Add `index.html` as the main file
+3. The Gist will be available at `https://gist.github.com/[username]/[gist-id]`
+4. You can also use services like [Gist.io](https://gist.io) to create a more polished view
+
+## Data Source
+
+The page fetches test results from:
+- Base URL: `https://bundler-test-results.erc4337.io/`
+- Versions: v06, v07, v08 (default)
+- Endpoint: `/v{version}/history/history.json`
+
+## Customization
+
+### Changing the Back Link
+
+Update the "Back to Documentation" link in `index.html`:
+
+```html
+<a href="YOUR_GITBOOK_URL" class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm font-medium">
+    ← Back to Documentation
+</a>
 ```
 
-Then, start local development.
+### Modifying Colors and Styling
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+The page uses Tailwind CSS classes. You can customize the appearance by:
+1. Modifying the CSS variables in the `<style>` section of `index.html`
+2. Changing Tailwind classes throughout the HTML
+3. Adding custom CSS rules
 
-If you want to display the test results from a local file, make sure you checkout the "bundler-test-results" project, and symlink from this project's "public" folder to it.
+### Adding New Features
 
-e.g. 
-```bash
-cd public; ln -s ../../bundler-test-results/v06
-```
+The JavaScript is modular and well-commented. Key functions:
+- `loadTestResults()` - Fetches and processes data
+- `renderTables()` - Renders both data tables
+- `initializeTheme()` - Sets up dark/light mode
+- `initializeVersionSelector()` - Handles version switching
 
-Then run the project using the command
+## Browser Compatibility
 
-```bash
-npm run dev:localtestresults
-```
+- Modern browsers with ES6+ support
+- Mobile browsers (iOS Safari, Chrome Mobile)
+- Desktop browsers (Chrome, Firefox, Safari, Edge)
 
-The site will be accessable on [localhost:3000](http://localhost:3000).
+## Performance
 
-## Deployment
+- Lightweight: ~50KB total (including Tailwind CSS)
+- Fast loading: No build process or dependencies
+- Efficient: Minimal DOM manipulation
+- Responsive: Optimized for mobile devices
 
-Merging to the `master` branch will automaticlaly deploy to Vercel
+## License
+
+This project is part of the ERC-4337 ecosystem. Please refer to the original project for licensing information.

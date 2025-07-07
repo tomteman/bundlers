@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERC-4337 Bundler Test Results</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Custom styles for dark mode and responsive design */
+        .dark {
+            color-scheme: dark;
+        }
+        
+        .dark body {
+            background-color: #1a1a1a;
+            color: #e5e5e5;
+        }
+        
+        .dark .bg-white {
+            background-color: #2d2d2d;
+        }
+        
+        .dark .border-gray-200 {
+            border-color: #404040;
+        }
+        
+        .dark .text-gray-600 {
+            color: #a3a3a3;
+        }
+        
+        .dark .text-gray-800 {
+            color: #e5e5e5;
+        }
+        
+        .dark .bg-gray-50 {
+            background-color: #262626;
+        }
+        
+        .dark .bg-blue-50 {
+            background-color: #1e3a8a;
+        }
+        
+        .dark .border-blue-200 {
+            border-color: #3b82f6;
+        }
+        
+        .dark .text-blue-600 {
+            color: #60a5fa;
+        }
+        
+        .dark .text-blue-800 {
+            color: #93c5fd;
+        }
+        
+        .dark .bg-black {
+            background-color: #000000;
+        }
+        
+        .dark .border-black {
+            border-color: #404040;
+        }
+        
+        .dark .text-lime-500 {
+            color: #84cc16;
+        }
+        
+        .dark .text-yellow-500 {
+            color: #eab308;
+        }
+        
+        .dark .text-red-500 {
+            color: #ef4444;
+        }
+        
+        /* Responsive table styles */
+        .table-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .table-container table {
+            min-width: 800px;
+        }
+        
+        @media (max-width: 768px) {
+            .table-container table {
+                min-width: 600px;
+            }
+        }
+        
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Theme toggle button */
+        .theme-toggle {
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Remove the problematic global transition */
+        /* * {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        } */
+        
+        /* Narrower test name column */
+        .test-name-column {
+            max-width: 300px;
+            min-width: 250px;
+            overflow: hidden;
+        }
+        
+        .test-name-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+        
+        .test-name-text:hover {
+            overflow-x: auto;
+            white-space: normal;
+            word-break: break-word;
+        }
+        
+        /* Resources section styling */
+        .resources-section {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+        
+        .dark .resources-section {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        }
+        
+        /* Fix dark mode text readability */
+        .dark .bg-gray-100 {
+            background-color: #374151;
+        }
+        
+        .dark .text-gray-900 {
+            color: #f9fafb;
+        }
+        
+        .dark .text-gray-700 {
+            color: #d1d5db;
+        }
+        
+        .dark .text-gray-600 {
+            color: #9ca3af;
+        }
+        
+        .dark .text-gray-500 {
+            color: #6b7280;
+        }
+        
+        .dark .text-gray-400 {
+            color: #9ca3af;
+        }
+        
+        .dark .border-gray-200 {
+            border-color: #4b5563;
+        }
+        
+        .dark .border-gray-700 {
+            border-color: #4b5563;
+        }
+        
+        .dark .hover\:bg-gray-50:hover {
+            background-color: #374151;
+        }
+        
+        .dark .hover\:bg-gray-700:hover {
+            background-color: #4b5563;
+        }
+        
+        /* Fix version selector dark mode text */
+        .dark .text-blue-900 {
+            color: #dbeafe;
+        }
+        
+        .dark .text-blue-100 {
+            color: #dbeafe;
+        }
+        
+        /* Fix non-selected button text in dark mode */
+        .dark .bg-gray-200 {
+            background-color: #374151;
+        }
+        
+        .dark .bg-gray-700 {
+            background-color: #374151;
+        }
+        
+        .dark .text-gray-700 {
+            color: #f3f4f6;
+        }
+        
+        .dark .text-gray-300 {
+            color: #f3f4f6;
+        }
+        
+        .dark .hover\:bg-gray-300:hover {
+            background-color: #4b5563;
+        }
+        
+        .dark .hover\:bg-gray-600:hover {
+            background-color: #4b5563;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <h1 class="text-xl font-bold text-gray-900 dark:text-white">
+                        ERC-4337 Bundler Test Results
+                    </h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="#" class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm font-medium">
+                        ← Back to Documentation
+                    </a>
+                    <button 
+                        id="themeToggle" 
+                        class="theme-toggle p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
+                        aria-label="Toggle dark mode"
+                    >
+                        <svg id="sunIcon" class="w-5 h-5 text-gray-600 dark:text-gray-400 hidden" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+                        </svg>
+                        <svg id="moonIcon" class="w-5 h-5 text-gray-600 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Description -->
+        <div class="mb-8">
+            <p class="text-gray-600 dark:text-gray-400 mb-4">
+                A bundler is the core infrastructure component that allows account abstraction to work on any EVM network without requiring any changes to the protocol. Its purpose is to work with a new mempool of UserOperations and get the transaction included on-chain.
+            </p>
+            <p class="text-gray-600 dark:text-gray-400 mb-4">
+                This page presents an overview of the test coverage results of all open source bundlers in the ecosystem.
+            </p>
+            <p class="text-gray-600 dark:text-gray-400">
+                Published your own open source bundler? To add your bundler to the list, please submit a PR to 
+                <a href="https://github.com/eth-infinitism/bundler-test-executor" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:underline">
+                    https://github.com/eth-infinitism/bundler-test-executor
+                </a>
+            </p>
+        </div>
+
+        <!-- Version Selector -->
+        <div class="mb-8">
+            <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 rounded-r-lg">
+                <div class="flex items-start">
+                    <span class="text-xl mr-3 mt-1">💡</span>
+                    <div class="flex-1">
+                        <h2 class="font-bold text-lg text-blue-900 dark:text-blue-100 mb-2">
+                            <span id="versionTitle">Showing results for latest bundler version (0.8)</span>
+                        </h2>
+                        <div class="flex flex-wrap gap-2">
+                            <button 
+                                id="v08" 
+                                class="version-btn px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                                data-version="08"
+                            >
+                                v0.8 (Latest)
+                            </button>
+                            <button 
+                                id="v07" 
+                                class="version-btn px-3 py-1 text-sm bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                                data-version="07"
+                            >
+                                v0.7 (Legacy)
+                            </button>
+                            <button 
+                                id="v06" 
+                                class="version-btn px-3 py-1 text-sm bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                                data-version="06"
+                            >
+                                v0.6 (Legacy)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="hidden text-center py-12">
+            <div class="loading mx-auto mb-4"></div>
+            <p class="text-gray-600 dark:text-gray-400">Loading test results...</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="errorState" class="hidden text-center py-12">
+            <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 max-w-md mx-auto">
+                <div class="text-red-600 dark:text-red-400 text-4xl mb-4">⚠️</div>
+                <h3 class="text-lg font-semibold text-red-800 dark:text-red-200 mb-2">Error Loading Data</h3>
+                <p class="text-red-600 dark:text-red-400 text-sm" id="errorMessage">Failed to load test results. Please try again.</p>
+            </div>
+        </div>
+
+        <!-- Overall Results Table -->
+        <div id="overallResults" class="mb-12">
+            <h2 class="text-xl font-bold border-l-4 border-black dark:border-gray-400 pl-4 mb-6 text-gray-900 dark:text-white">
+                Overall results of last 10 runs
+            </h2>
+            <div class="table-container">
+                <table id="overallTable" class="w-full border-collapse bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg">
+                    <thead id="overallTableHead">
+                        <!-- Headers will be populated by JavaScript -->
+                    </thead>
+                    <tbody id="overallTableBody">
+                        <!-- Rows will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Per-Test Results Table -->
+        <div id="perTestResults">
+            <h2 class="text-xl font-bold border-l-4 border-black dark:border-gray-400 pl-4 mb-2 text-gray-900 dark:text-white">
+                Per-test result of latest run
+            </h2>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-6 pl-4">
+                ( ✅ success ; ❌ error ; ➖ skipped )
+            </p>
+            <div class="table-container">
+                <table id="perTestTable" class="w-full border-collapse bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg">
+                    <thead id="perTestTableHead">
+                        <!-- Headers will be populated by JavaScript -->
+                    </thead>
+                    <tbody id="perTestTableBody">
+                        <!-- Rows will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Resources Section -->
+    <section class="resources-section -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-12 mt-12">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">Resources</h2>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Specifications -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">
+                        Specifications
+                    </h3>
+                    <ul class="space-y-3">
+                        <li>
+                            <a href="https://github.com/eth-infinitism/bundler-spec" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:underline block">
+                                API Specification
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/eth-infinitism/bundler-spec-tests" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:underline block">
+                                Compatibility tests
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/eth-infinitism/bundler-test-results" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:underline block">
+                                Tests results
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Bundlers -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">
+                        Bundlers
+                    </h3>
+                    <ul class="space-y-3">
+                        <li>
+                            <a href="https://github.com/eth-infinitism/bundler" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:underline block">
+                                AA-Reference-Bundler/0.5.0
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/stackup-wallet/stackup-bundler" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:underline block">
+                                Stackup Bundler
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/Vid201/silius/" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:underline block">
+                                Silius
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/etherspot/skandha" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:underline block">
+                                Skandha
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/candidelabs/voltaire" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:underline block">
+                                Voltaire
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/okx/okbund" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:underline block">
+                                OKBund
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/transeptorlabs/transeptor-bundler" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:underline block">
+                                Transeptor
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/pimlicolabs/alto" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:underline block">
+                                Alto
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/alchemyplatform/rundler" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:underline block">
+                                Rundler
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Articles -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">
+                        Articles
+                    </h3>
+                    <ul class="space-y-3">
+                        <li>
+                            <a href="https://notes.ethereum.org/@yoav/unified-erc-4337-mempool" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:underline block">
+                                Unified ERC-4337 mempool
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html> 

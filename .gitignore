@@ -1,41 +1,8 @@
+# macOS system files
 .DS_Store
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+# Log files
+*.log
 
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# builds
-./next/
-/build
-/public/v0*
-
-# misc
-.DS_Store
-*.pem
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# local env files
-.env*.local
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-
-# IDE settings
-.vscode
+# Local environment files (if you ever add any)
+.env*
