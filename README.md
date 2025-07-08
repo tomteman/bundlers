@@ -34,6 +34,27 @@ A standalone, modern web page displaying ERC-4337 bundler test results. This is 
 3. The Gist will be available at `https://gist.github.com/[username]/[gist-id]`
 4. You can also use services like [Gist.io](https://gist.io) to create a more polished view
 
+## Running Locally
+
+You can view the site locally in two ways:
+
+### Option 1: Open Directly
+- Double-click `index.html` or open it in your browser.
+- **Note:** Some browsers may block API requests due to CORS when using the `file://` protocol.
+
+### Option 2: Use a Simple Local Server (Recommended)
+- Run a local server in your project directory:
+  - **Python 3:**
+    ```sh
+    python3 -m http.server 8000
+    ```
+    Then open [http://localhost:8000](http://localhost:8000) in your browser.
+  - **Node.js (http-server):**
+    ```sh
+    npx http-server .
+    ```
+- This ensures all features (like fetching remote JSON) work as expected.
+
 ## Data Source
 
 The page fetches test results from:
